@@ -165,10 +165,10 @@ class _RandomWordsState extends State<RandomWords> {
             onPressed: () {
               if (_view == 0) {
                 _view = 1;
-                // _colum = 1;
+
               } else {
                 _view = 0;
-                // _colum = 2;
+
               }
               setState(() {});
             }),

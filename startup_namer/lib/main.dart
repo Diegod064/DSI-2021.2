@@ -85,20 +85,22 @@ class _RandomWordsState extends State<RandomWords> {
             _suggestions[index].asPascalCase,
             style: _biggerFont,
           ),
-          trailing: Icon(
-            alreadySaved ? Icons.favorite : Icons.favorite_border,
-            color: alreadySaved ? Colors.red : null,
-            semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-          ),
-          onTap: () {
-            setState(() {
-              if (alreadySaved) {
-                _saved.remove(_suggestions[index]);
-              } else {
-                _saved.add(_suggestions[index]);
-              }
-            });
-          },
+          trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    if (alreadySaved) {
+                      _saved.remove(_suggestions[index]);
+                    } else {
+                      _saved.add(_suggestions[index]);
+                    }
+                  });
+                },
+                icon: Icon(
+                  alreadySaved ? Icons.favorite : Icons.favorite_border,
+                  color: alreadySaved ? Colors.red : null,
+                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                ),
+              ),
         );
       },
     );
@@ -110,34 +112,32 @@ class _RandomWordsState extends State<RandomWords> {
       itemBuilder: (context, i) {
         final index = i;
         final alreadySaved = _saved.contains(_suggestions[index]);
-        return GestureDetector(
-          onTap: () {
-            setState(
-              () {
-                if (alreadySaved) {
-                  _saved.remove(_suggestions[index]);
-                } else {
-                  _saved.add(_suggestions[index]);
-                }
-              },
-            );
-          },
-          child: Card(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _suggestions[index].asPascalCase,
-                  style: _biggerFont,
-                ),
-                const SizedBox(height: 10),
-                Icon(
+        return Card(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _suggestions[index].asPascalCase,
+                style: _biggerFont,
+              ),
+              const SizedBox(height: 10),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    if (alreadySaved) {
+                      _saved.remove(_suggestions[index]);
+                    } else {
+                      _saved.add(_suggestions[index]);
+                    }
+                  });
+                },
+                icon: Icon(
                   alreadySaved ? Icons.favorite : Icons.favorite_border,
                   color: alreadySaved ? Colors.red : null,
                   semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         );
       },
@@ -165,10 +165,8 @@ class _RandomWordsState extends State<RandomWords> {
             onPressed: () {
               if (_view == 0) {
                 _view = 1;
-
               } else {
                 _view = 0;
-
               }
               setState(() {});
             }),

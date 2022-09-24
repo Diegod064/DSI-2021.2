@@ -13,11 +13,14 @@ class PaginaEditar extends StatefulWidget {
 
 class _PaginaEditarState extends State<PaginaEditar> {
   String query = '';
+  
+  String texto = '';
 
   @override
   Widget build(BuildContext context) {
     final argumentos = ModalRoute.of(context)!.settings.arguments as Argumentos;
-    query = argumentos.nome.asPascalCase;
+    // query = argumentos.nome.asPascalCase;
+    // String texto = '';
 
     return Scaffold(
       appBar: AppBar(
@@ -29,29 +32,70 @@ class _PaginaEditarState extends State<PaginaEditar> {
         child: Column(
           children: [
             const Center(
-              child: Text("Palavra editada:",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.w400)),
+              child: Text("Palavra selecionada:",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400)),
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Center(
               child: Text(
                 argumentos.nome.asPascalCase,
-                style: const TextStyle(fontSize: 32),
+                style: const TextStyle(fontSize: 25),
               ),
             ),
-            buildTextBox()
+            const SizedBox(
+              height: 10,
+            ),
+            buildTextBox(),
+            SizedBox(
+              height: 10,
+            ),
+            botaoSalvar(),
+            // Text(texto)
           ],
         ),
       ),
     );
   }
 
+  botaoSalvar() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          texto = query;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+        child: Container(
+            height: 40,
+            width: 80,
+            // alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                      offset: const Offset(0, 4)),
+                ]),
+            child: Center(child: Text('Salvar'))),
+      ),
+    );
+  }
+
   Widget buildTextBox() => TextBoxWidget(
         text: query,
-        onChanged: asdasdasd,
+        onChanged: queryChange,
         hintText: 'Digite um nome',
       );
 
-  void asdasdasd(String query) {
+  void queryChange(String query) {
     this.query = query;
   }
 }

@@ -4,11 +4,20 @@
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-
-enum ViewType { grid, list }
+import 'package:startup_namer/editar.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+class Argumentos {
+  final WordPair nome;
+  Argumentos(this.nome);
+}
+
+class Repositorio {
+  Iterable<WordPair> palavra;
+  Repositorio(this.palavra);
 }
 
 class MyApp extends StatelessWidget {
@@ -16,14 +25,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
+    return MaterialApp(
+      initialRoute: '/',
+      // home: RandomWords(),
+      routes: {
+        '/': (context) => const RandomWords(),
+        PaginaEditar.routeName: (context) =>  PaginaEditar(),
+      },
     );
   }
 }
 
 class RandomWords extends StatefulWidget {
+  static const routeName = '/';
   const RandomWords({Key? key}) : super(key: key);
 
   @override
@@ -33,6 +47,7 @@ class RandomWords extends StatefulWidget {
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _saved = <WordPair>[];
+  final repo = Repositorio(generateWordPairs().take(20)).palavra.toList();
   final _biggerFont = const TextStyle(fontSize: 18);
   var _view = 0;
 
@@ -71,27 +86,35 @@ class _RandomWordsState extends State<RandomWords> {
   listBuilder() {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
+      itemCount: 20,
       itemBuilder: (context, i) {
-        if (i.isOdd) return const Divider();
+        // if (i.isOdd) return const Divider();
 
-        final index = i ~/ 2;
+        final index = i ~/ 1;
         if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
+          _suggestions.addAll(generateWordPairs().take(20));
         }
 
-        final alreadySaved = _saved.contains(_suggestions[index]);
-        return ListTile(
-          title: Text(
-            _suggestions[index].asPascalCase,
-            style: _biggerFont,
-          ),
-          trailing: IconButton(
+        final alreadySaved = _saved.contains(repo.elementAt(index));
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context,"/editar", 
+            arguments: Argumentos(repo[index]),
+            );
+          },
+          child: Card(
+            child: ListTile(
+              title: Text(
+                repo.elementAt(index).asPascalCase,
+                style: _biggerFont,
+              ),
+              trailing: IconButton(
                 onPressed: () {
                   setState(() {
                     if (alreadySaved) {
-                      _saved.remove(_suggestions[index]);
+                      _saved.remove(repo.elementAt(index));
                     } else {
-                      _saved.add(_suggestions[index]);
+                      _saved.add(repo.elementAt(index));
                     }
                   });
                 },
@@ -101,6 +124,8 @@ class _RandomWordsState extends State<RandomWords> {
                   semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
                 ),
               ),
+            ),
+          ),
         );
       },
     );
@@ -109,15 +134,16 @@ class _RandomWordsState extends State<RandomWords> {
   gridBuilder() {
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
+      itemCount: 20,
       itemBuilder: (context, i) {
         final index = i;
-        final alreadySaved = _saved.contains(_suggestions[index]);
+        final alreadySaved = _saved.contains(repo.elementAt(index));
         return Card(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                _suggestions[index].asPascalCase,
+                repo.elementAt(index).asPascalCase,
                 style: _biggerFont,
               ),
               const SizedBox(height: 10),
@@ -125,9 +151,9 @@ class _RandomWordsState extends State<RandomWords> {
                 onPressed: () {
                   setState(() {
                     if (alreadySaved) {
-                      _saved.remove(_suggestions[index]);
+                      _saved.remove(repo.elementAt(index));
                     } else {
-                      _saved.add(_suggestions[index]);
+                      _saved.add(repo.elementAt(index));
                     }
                   });
                 },

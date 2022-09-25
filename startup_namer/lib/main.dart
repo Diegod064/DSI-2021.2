@@ -85,10 +85,40 @@ class _RandomWordsState extends State<RandomWords> {
             _suggestions[index].asPascalCase,
             style: _biggerFont,
           ),
-          trailing: Icon(
-            alreadySaved ? Icons.favorite : Icons.favorite_border,
-            color: alreadySaved ? Colors.red : null,
-            semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+          trailing: Wrap(
+            children: [
+              IconButton(
+                icon: Icon(
+                  alreadySaved ? Icons.favorite : Icons.favorite_border,
+                  color: alreadySaved ? Colors.red : null,
+                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                ),
+                onPressed: () {
+                  setState(() {
+                    //lógica da troca de estado
+                    if (alreadySaved) {
+                      _saved.remove(_suggestions[index]);
+                    } else {
+                      _saved.add(_suggestions[index]);
+                    }
+                  });
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  semanticLabel: 'Deletado',
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (alreadySaved) {
+                      _saved.remove(_suggestions[index]);
+                    }
+                    _suggestions.remove(_suggestions[index]);
+                  });
+                },
+              )
+            ],
           ),
           onTap: () {
             setState(() {
@@ -131,10 +161,31 @@ class _RandomWordsState extends State<RandomWords> {
                   style: _biggerFont,
                 ),
                 const SizedBox(height: 10),
-                Icon(
-                  alreadySaved ? Icons.favorite : Icons.favorite_border,
-                  color: alreadySaved ? Colors.red : null,
-                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      alreadySaved ? Icons.favorite : Icons.favorite_border,
+                      color: alreadySaved ? Colors.red : null,
+                      semanticLabel:
+                          alreadySaved ? 'Remove from saved' : 'Save',
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        semanticLabel: 'Deletado',
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (alreadySaved) {
+                            _saved.remove(_suggestions[index]);
+                          }
+                          _suggestions
+                              .remove(_suggestions[index]);
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

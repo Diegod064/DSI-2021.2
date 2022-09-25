@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
-      // home: RandomWords(),
       routes: {
         '/': (context) => const RandomWords(),
         PaginaEditar.routeName: (context) => PaginaEditar(),
@@ -39,7 +38,6 @@ class RandomWords extends StatefulWidget {
 class _RandomWordsState extends State<RandomWords> {
   final Repositorio _suggestions = Repositorio();
   final _saved = <Word>{};
-  // final repo = Repositorio(generateWordPairs().take(20)).palavra.toList();
   final _biggerFont = const TextStyle(fontSize: 18);
   var _view = 0;
 
@@ -80,13 +78,7 @@ class _RandomWordsState extends State<RandomWords> {
       padding: const EdgeInsets.all(16.0),
       itemCount: 20,
       itemBuilder: (context, i) {
-        // if (i.isOdd) return const Divider();
-
         final index = i ~/ 1;
-        // if (index >= _suggestions.length) {
-        //   _suggestions.addAll(generateWordPairs().take(20));
-        // }
-
         final alreadySaved = _saved.contains(_suggestions.index(index));
         return GestureDetector(
           onTap: () {

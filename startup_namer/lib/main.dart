@@ -137,8 +137,12 @@ class _RandomWordsState extends State<RandomWords> {
   gridBuilder() {
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
+      itemCount: _suggestions.length,
       itemBuilder: (context, i) {
         final index = i;
+        if (index >= _suggestions.length) {
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
         final alreadySaved = _saved.contains(_suggestions[index]);
         return GestureDetector(
           onTap: () {

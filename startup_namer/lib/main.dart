@@ -125,7 +125,7 @@ class _RandomWordsState extends State<RandomWords> {
                     onPressed: () {
                       setState(() {
                         if (alreadySaved) {
-                          _saved.remove(_suggestions.index(index));  
+                          _saved.remove(_suggestions.index(index));
                         }
                         _suggestions.remove(index);
                       });
@@ -143,7 +143,7 @@ class _RandomWordsState extends State<RandomWords> {
   gridBuilder() {
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: 20,
+      itemCount: _suggestions.length,
       itemBuilder: (context, i) {
         final index = i;
         final alreadySaved = _saved.contains(_suggestions.index(index));
@@ -168,21 +168,41 @@ class _RandomWordsState extends State<RandomWords> {
                   style: _biggerFont,
                 ),
                 const SizedBox(height: 10),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (alreadySaved) {
-                        _saved.remove(_suggestions.index(index));
-                      } else {
-                        _saved.add(_suggestions.index(index));
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    alreadySaved ? Icons.favorite : Icons.favorite_border,
-                    color: alreadySaved ? Colors.red : null,
-                    semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (alreadySaved) {
+                            _saved.remove(_suggestions.index(index));
+                          } else {
+                            _saved.add(_suggestions.index(index));
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        alreadySaved ? Icons.favorite : Icons.favorite_border,
+                        color: alreadySaved ? Colors.red : null,
+                        semanticLabel:
+                            alreadySaved ? 'Remove from saved' : 'Save',
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        semanticLabel: 'Deletado',
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (alreadySaved) {
+                            _saved.remove(_suggestions.index(index));
+                          }
+                          _suggestions.remove(index);
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

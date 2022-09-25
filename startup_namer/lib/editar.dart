@@ -23,7 +23,22 @@ class _PaginaEditarState extends State<PaginaEditar> {
     final argumentos = ModalRoute.of(context)!.settings.arguments as Argumentos;
     final rep = argumentos.rep;
     final index = argumentos.index;
-    
+    final isAdd = argumentos.isAdd;
+    String textAdd = '';
+
+    if (isAdd) {
+      textAdd = 'Digite uma palavra a ser adicionada:';
+    } else {
+      textAdd = 'Palavra selecionada:';
+    }
+
+    getName(index) {
+      if (isAdd) {
+        return '';
+      } else {
+        return rep.index(index).asPascalCase;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -34,17 +49,19 @@ class _PaginaEditarState extends State<PaginaEditar> {
             const EdgeInsets.only(top: 20, left: 22, right: 22, bottom: 22),
         child: Column(
           children: [
-            const Center(
-              child: Text("Palavra selecionada:",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400)),
+            Center(
+              child: Text(textAdd,
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w400)),
             ),
             const SizedBox(
               height: 10,
             ),
             Center(
               child: Text(
-                rep.index(index).asPascalCase,
-                style: const TextStyle(fontSize: 25),
+                getName(index),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(
@@ -57,9 +74,16 @@ class _PaginaEditarState extends State<PaginaEditar> {
             GestureDetector(
               onTap: () {
                 if (query != '') {
-                  setState(() {
-                    rep.changeWordByIndex(query, index);
-                  });
+                  if (isAdd) {
+                    setState(() {
+                      rep.addWord(query);
+                    });
+                  } else {
+                    setState(() {
+                      rep.changeWordByIndex(query, index);
+                    });
+                  }
+
                   Navigator.pop(context);
                 } else {
                   setState(() {});
@@ -84,7 +108,7 @@ class _PaginaEditarState extends State<PaginaEditar> {
                               blurRadius: 4,
                               offset: const Offset(0, 4)),
                         ]),
-                    child: Center(child: Text('Salvar'))),
+                    child: const Center(child: Text('Salvar'))),
               ),
             ),
             Text(errorMsg, style: const TextStyle(color: Colors.red))

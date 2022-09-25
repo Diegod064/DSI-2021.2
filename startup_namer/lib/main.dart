@@ -9,7 +9,8 @@ void main() {
 class Argumentos {
   final Repositorio rep;
   final int index;
-  Argumentos(this.rep, this.index);
+  final bool isAdd;
+  Argumentos(this.rep, this.index, this.isAdd);
 }
 
 class MyApp extends StatelessWidget {
@@ -76,7 +77,7 @@ class _RandomWordsState extends State<RandomWords> {
   listBuilder() {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: 20,
+      itemCount: _suggestions.length,
       itemBuilder: (context, i) {
         final index = i ~/ 1;
         final alreadySaved = _saved.contains(_suggestions.index(index));
@@ -85,7 +86,7 @@ class _RandomWordsState extends State<RandomWords> {
             Navigator.pushNamed(
               context,
               "/editar",
-              arguments: Argumentos(_suggestions, index),
+              arguments: Argumentos(_suggestions, index, false),
             ).then(
               (value) {
                 setState(() {});
@@ -124,7 +125,7 @@ class _RandomWordsState extends State<RandomWords> {
   gridBuilder() {
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: 20,
+      itemCount: _suggestions.length,
       itemBuilder: (context, i) {
         final index = i;
         final alreadySaved = _saved.contains(_suggestions.index(index));
@@ -133,7 +134,7 @@ class _RandomWordsState extends State<RandomWords> {
             Navigator.pushNamed(
               context,
               "/editar",
-              arguments: Argumentos(_suggestions, index),
+              arguments: Argumentos(_suggestions, index, false),
             ).then(
               (value) {
                 setState(() {});
@@ -186,6 +187,21 @@ class _RandomWordsState extends State<RandomWords> {
               icon: const Icon(Icons.list),
               onPressed: _pushSaved,
               tooltip: 'Saved Suggestions',
+            ),
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed:  () {
+            Navigator.pushNamed(
+              context,
+              "/editar",
+              arguments: Argumentos(_suggestions, 1, true),
+            ).then(
+              (value) {
+                setState(() {});
+              },
+            );
+          },
+              tooltip: 'Add Suggestions',
             ),
           ],
         ),

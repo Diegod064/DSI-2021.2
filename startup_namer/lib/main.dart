@@ -99,21 +99,40 @@ class _RandomWordsState extends State<RandomWords> {
                 _suggestions.index(index).asPascalCase,
                 style: _biggerFont,
               ),
-              trailing: IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (alreadySaved) {
-                      _saved.remove(_suggestions.index(index));
-                    } else {
-                      _saved.add(_suggestions.index(index));
-                    }
-                  });
-                },
-                icon: Icon(
-                  alreadySaved ? Icons.favorite : Icons.favorite_border,
-                  color: alreadySaved ? Colors.red : null,
-                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-                ),
+              trailing: Wrap(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      alreadySaved ? Icons.favorite : Icons.favorite_border,
+                      color: alreadySaved ? Colors.red : null,
+                      semanticLabel:
+                          alreadySaved ? 'Remove from saved' : 'Save',
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (alreadySaved) {
+                          _saved.remove(_suggestions.index(index));
+                        } else {
+                          _saved.add(_suggestions.index(index));
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      semanticLabel: 'Deletado',
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (alreadySaved) {
+                          _saved.remove(_suggestions.index(index));
+                        }
+                        _suggestions.remove(index);
+                      });
+                    },
+                  )
+                ],
               ),
             ),
           ),
@@ -150,21 +169,41 @@ class _RandomWordsState extends State<RandomWords> {
                   style: _biggerFont,
                 ),
                 const SizedBox(height: 10),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (alreadySaved) {
-                        _saved.remove(_suggestions.index(index));
-                      } else {
-                        _saved.add(_suggestions.index(index));
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    alreadySaved ? Icons.favorite : Icons.favorite_border,
-                    color: alreadySaved ? Colors.red : null,
-                    semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (alreadySaved) {
+                            _saved.remove(_suggestions.index(index));
+                          } else {
+                            _saved.add(_suggestions.index(index));
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        alreadySaved ? Icons.favorite : Icons.favorite_border,
+                        color: alreadySaved ? Colors.red : null,
+                        semanticLabel:
+                            alreadySaved ? 'Remove from saved' : 'Save',
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        semanticLabel: 'Deletado',
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (alreadySaved) {
+                            _saved.remove(_suggestions.index(index));
+                          }
+                          _suggestions.remove(index);
+                        });
+                      },
+                    )
+                  ],
                 )
               ],
             ),

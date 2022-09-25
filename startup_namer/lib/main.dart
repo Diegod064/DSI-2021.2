@@ -1,8 +1,3 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/editar.dart';
 import 'package:startup_namer/palavras.dart';
@@ -16,11 +11,6 @@ class Argumentos {
   final int index;
   Argumentos(this.rep, this.index);
 }
-
-// class Repositorio {
-//   Iterable<WordPair> palavra;
-//   Repositorio(this.palavra);
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

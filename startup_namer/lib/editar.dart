@@ -14,22 +14,16 @@ class PaginaEditar extends StatefulWidget {
 
 class _PaginaEditarState extends State<PaginaEditar> {
   String query = '';
-  String texto = '';
   late Repositorio repo;
   late int indice;
+  String errorMsg = '';
 
   @override
   Widget build(BuildContext context) {
     final argumentos = ModalRoute.of(context)!.settings.arguments as Argumentos;
-    // query = argumentos.nome.asPascalCase;
-    // String texto = '';
     final rep = argumentos.rep;
     final index = argumentos.index;
-
-    initState() {
-      repo = rep;
-      indice = index;
-    }
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -57,76 +51,48 @@ class _PaginaEditarState extends State<PaginaEditar> {
               height: 10,
             ),
             buildTextBox(),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             GestureDetector(
-      onTap: () {
-        setState(() {
-          texto = query;
-          rep.changeWordByIndex(query, index);
-        });
-        Navigator.pop(context);
-      },
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
-        child: Container(
-            height: 40,
-            width: 80,
-            // alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 0,
-                      blurRadius: 4,
-                      offset: const Offset(0, 4)),
-                ]),
-            child: Center(child: Text('Salvar'))),
-      ),
-    ),
-            Text(query)
+              onTap: () {
+                if (query != '') {
+                  setState(() {
+                    rep.changeWordByIndex(query, index);
+                  });
+                  Navigator.pop(context);
+                } else {
+                  setState(() {});
+                  errorMsg = 'Digite uma palavra para salvar';
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+                child: Container(
+                    height: 40,
+                    width: 80,
+                    // alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 0,
+                              blurRadius: 4,
+                              offset: const Offset(0, 4)),
+                        ]),
+                    child: Center(child: Text('Salvar'))),
+              ),
+            ),
+            Text(errorMsg, style: const TextStyle(color: Colors.red))
           ],
         ),
       ),
     );
   }
-
-  // botaoSalvar() {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       setState(() {
-  //         texto = query;
-  //         rep.changeWordByIndex(query, indice);
-  //       });
-  //       // Navigator.pop(context);
-  //     },
-  //     child: Padding(
-  //       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
-  //       child: Container(
-  //           height: 40,
-  //           width: 80,
-  //           // alignment: Alignment.center,
-  //           decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               borderRadius: const BorderRadius.all(
-  //                 Radius.circular(20),
-  //               ),
-  //               boxShadow: [
-  //                 BoxShadow(
-  //                     color: Colors.grey.withOpacity(0.5),
-  //                     spreadRadius: 0,
-  //                     blurRadius: 4,
-  //                     offset: const Offset(0, 4)),
-  //               ]),
-  //           child: Center(child: Text('Salvar'))),
-  //     ),
-  //   );
-  // }
 
   Widget buildTextBox() => TextBoxWidget(
         text: query,

@@ -128,32 +128,45 @@ class _RandomWordsState extends State<RandomWords> {
       itemBuilder: (context, i) {
         final index = i;
         final alreadySaved = _saved.contains(_suggestions.index(index));
-        return Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _suggestions.index(index).asPascalCase,
-                style: _biggerFont,
-              ),
-              const SizedBox(height: 10),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (alreadySaved) {
-                      _saved.remove(_suggestions.index(index));
-                    } else {
-                      _saved.add(_suggestions.index(index));
-                    }
-                  });
-                },
-                icon: Icon(
-                  alreadySaved ? Icons.favorite : Icons.favorite_border,
-                  color: alreadySaved ? Colors.red : null,
-                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              "/editar",
+              arguments: Argumentos(_suggestions, index),
+            ).then(
+              (value) {
+                setState(() {});
+              },
+            );
+          },
+          child: Card(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _suggestions.index(index).asPascalCase,
+                  style: _biggerFont,
                 ),
-              )
-            ],
+                const SizedBox(height: 10),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (alreadySaved) {
+                        _saved.remove(_suggestions.index(index));
+                      } else {
+                        _saved.add(_suggestions.index(index));
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    alreadySaved ? Icons.favorite : Icons.favorite_border,
+                    color: alreadySaved ? Colors.red : null,
+                    semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },

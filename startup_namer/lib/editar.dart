@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/main.dart';
+import 'package:startup_namer/palavras.dart';
 
 class PaginaEditar extends StatefulWidget {
   static const routeName = '/editar';
@@ -13,14 +14,22 @@ class PaginaEditar extends StatefulWidget {
 
 class _PaginaEditarState extends State<PaginaEditar> {
   String query = '';
-  
   String texto = '';
+  late Repositorio repo;
+  late int indice;
 
   @override
   Widget build(BuildContext context) {
     final argumentos = ModalRoute.of(context)!.settings.arguments as Argumentos;
     // query = argumentos.nome.asPascalCase;
     // String texto = '';
+    final rep = argumentos.rep;
+    final index = argumentos.index;
+
+    initState() {
+      repo = rep;
+      indice = index;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +49,7 @@ class _PaginaEditarState extends State<PaginaEditar> {
             ),
             Center(
               child: Text(
-                argumentos.nome.asPascalCase,
+                rep.index(index).asPascalCase,
                 style: const TextStyle(fontSize: 25),
               ),
             ),
@@ -51,20 +60,13 @@ class _PaginaEditarState extends State<PaginaEditar> {
             SizedBox(
               height: 10,
             ),
-            botaoSalvar(),
-            // Text(texto)
-          ],
-        ),
-      ),
-    );
-  }
-
-  botaoSalvar() {
-    return GestureDetector(
+            GestureDetector(
       onTap: () {
         setState(() {
           texto = query;
+          rep.changeWordByIndex(query, index);
         });
+        Navigator.pop(context);
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
@@ -86,8 +88,45 @@ class _PaginaEditarState extends State<PaginaEditar> {
                 ]),
             child: Center(child: Text('Salvar'))),
       ),
+    ),
+            Text(query)
+          ],
+        ),
+      ),
     );
   }
+
+  // botaoSalvar() {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         texto = query;
+  //         rep.changeWordByIndex(query, indice);
+  //       });
+  //       // Navigator.pop(context);
+  //     },
+  //     child: Padding(
+  //       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+  //       child: Container(
+  //           height: 40,
+  //           width: 80,
+  //           // alignment: Alignment.center,
+  //           decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: const BorderRadius.all(
+  //                 Radius.circular(20),
+  //               ),
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                     color: Colors.grey.withOpacity(0.5),
+  //                     spreadRadius: 0,
+  //                     blurRadius: 4,
+  //                     offset: const Offset(0, 4)),
+  //               ]),
+  //           child: Center(child: Text('Salvar'))),
+  //     ),
+  //   );
+  // }
 
   Widget buildTextBox() => TextBoxWidget(
         text: query,

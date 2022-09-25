@@ -5,20 +5,22 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/editar.dart';
+import 'package:startup_namer/palavras.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class Argumentos {
-  final WordPair nome;
-  Argumentos(this.nome);
+  final Repositorio rep;
+  final int index;
+  Argumentos(this.rep, this.index);
 }
 
-class Repositorio {
-  Iterable<WordPair> palavra;
-  Repositorio(this.palavra);
-}
+// class Repositorio {
+//   Iterable<WordPair> palavra;
+//   Repositorio(this.palavra);
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
       // home: RandomWords(),
       routes: {
         '/': (context) => const RandomWords(),
-        PaginaEditar.routeName: (context) =>  PaginaEditar(),
+        PaginaEditar.routeName: (context) => PaginaEditar(),
       },
     );
   }
@@ -45,9 +47,9 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _saved = <WordPair>[];
-  final repo = Repositorio(generateWordPairs().take(20)).palavra.toList();
+  final Repositorio _suggestions = Repositorio();
+  final _saved = <Word>{};
+  // final repo = Repositorio(generateWordPairs().take(20)).palavra.toList();
   final _biggerFont = const TextStyle(fontSize: 18);
   var _view = 0;
 
@@ -91,30 +93,36 @@ class _RandomWordsState extends State<RandomWords> {
         // if (i.isOdd) return const Divider();
 
         final index = i ~/ 1;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(20));
-        }
+        // if (index >= _suggestions.length) {
+        //   _suggestions.addAll(generateWordPairs().take(20));
+        // }
 
-        final alreadySaved = _saved.contains(repo.elementAt(index));
+        final alreadySaved = _saved.contains(_suggestions.index(index));
         return GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context,"/editar", 
-            arguments: Argumentos(repo[index]),
+            Navigator.pushNamed(
+              context,
+              "/editar",
+              arguments: Argumentos(_suggestions, index),
+            ).then(
+              (value) {
+                setState(() {});
+              },
             );
           },
           child: Card(
             child: ListTile(
               title: Text(
-                repo.elementAt(index).asPascalCase,
+                _suggestions.index(index).asPascalCase,
                 style: _biggerFont,
               ),
               trailing: IconButton(
                 onPressed: () {
                   setState(() {
                     if (alreadySaved) {
-                      _saved.remove(repo.elementAt(index));
+                      _saved.remove(_suggestions.index(index));
                     } else {
-                      _saved.add(repo.elementAt(index));
+                      _saved.add(_suggestions.index(index));
                     }
                   });
                 },
@@ -137,13 +145,13 @@ class _RandomWordsState extends State<RandomWords> {
       itemCount: 20,
       itemBuilder: (context, i) {
         final index = i;
-        final alreadySaved = _saved.contains(repo.elementAt(index));
+        final alreadySaved = _saved.contains(_suggestions.index(index));
         return Card(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                repo.elementAt(index).asPascalCase,
+                _suggestions.index(index).asPascalCase,
                 style: _biggerFont,
               ),
               const SizedBox(height: 10),
@@ -151,9 +159,9 @@ class _RandomWordsState extends State<RandomWords> {
                 onPressed: () {
                   setState(() {
                     if (alreadySaved) {
-                      _saved.remove(repo.elementAt(index));
+                      _saved.remove(_suggestions.index(index));
                     } else {
-                      _saved.add(repo.elementAt(index));
+                      _saved.add(_suggestions.index(index));
                     }
                   });
                 },

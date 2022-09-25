@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:startup_namer/editar.dart';
 import 'package:startup_namer/palavras.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -229,17 +233,17 @@ class _RandomWordsState extends State<RandomWords> {
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed:  () {
-            Navigator.pushNamed(
-              context,
-              "/editar",
-              arguments: Argumentos(_suggestions, 1, true),
-            ).then(
-              (value) {
-                setState(() {});
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  "/editar",
+                  arguments: Argumentos(_suggestions, 1, true),
+                ).then(
+                  (value) {
+                    setState(() {});
+                  },
+                );
               },
-            );
-          },
               tooltip: 'Add Suggestions',
             ),
           ],

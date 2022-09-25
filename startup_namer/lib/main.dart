@@ -76,7 +76,7 @@ class _RandomWordsState extends State<RandomWords> {
   listBuilder() {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
-      itemCount: 20,
+      itemCount: _suggestions.length,
       itemBuilder: (context, i) {
         final index = i ~/ 1;
         final alreadySaved = _saved.contains(_suggestions.index(index));
@@ -98,21 +98,40 @@ class _RandomWordsState extends State<RandomWords> {
                 _suggestions.index(index).asPascalCase,
                 style: _biggerFont,
               ),
-              trailing: IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (alreadySaved) {
-                      _saved.remove(_suggestions.index(index));
-                    } else {
-                      _saved.add(_suggestions.index(index));
-                    }
-                  });
-                },
-                icon: Icon(
-                  alreadySaved ? Icons.favorite : Icons.favorite_border,
-                  color: alreadySaved ? Colors.red : null,
-                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
-                ),
+              trailing: Wrap(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      alreadySaved ? Icons.favorite : Icons.favorite_border,
+                      color: alreadySaved ? Colors.red : null,
+                      semanticLabel:
+                          alreadySaved ? 'Remove from saved' : 'Save',
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (alreadySaved) {
+                          _saved.remove(_suggestions.index(index));
+                        } else {
+                          _saved.add(_suggestions.index(index));
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      semanticLabel: 'Deletado',
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (alreadySaved) {
+                          _saved.remove(_suggestions.index(index));  
+                        }
+                        _suggestions.remove(index);
+                      });
+                    },
+                  )
+                ],
               ),
             ),
           ),
